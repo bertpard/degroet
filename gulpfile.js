@@ -1,4 +1,5 @@
 var pkg = require('./package.json'),
+	del = require('del'),
 	gulp = require('gulp'),
 	autoprefixer = require('gulp-autoprefixer'),
 	bless = require('gulp-bless'),
@@ -13,7 +14,8 @@ var pkg = require('./package.json'),
 	sourcemaps = require('gulp-sourcemaps'),
 	uglify = require('gulp-uglify'),
 	gUtil = require('gulp-util'),
-	es = require('event-stream');
+	es = require('event-stream'),
+	jekyll = require('gulp-jekyll');
 
 // helper functions
 function onError(err) {
@@ -25,6 +27,27 @@ function onError(err) {
 function getArgument(key) {
 	return gUtil.env[key] ? gUtil.env[key] : null;
 }
+
+// clean folders
+gulp.task('clean', function(cb) {
+	del(pkg.clean, {
+		'force': true
+	}, function(error) {
+		cb(error);
+	});
+});
+
+//  Images
+gulp.task('imgbuild', function() {
+	return gulp.src(pkg.img.src)
+		.pipe(copy(pkg.img.dest, {
+			'prefix': 1
+		})) // needs to be copy, not just ".dest" as mac often throws errors when the folder doesn't exist
+		.pipe(notify({
+			'message': 'IMG build complete',
+			'onLast': true // otherwise the notify will be fired for each file in the pipe
+		}));
+});
 
 // CSS
 gulp.task('scsslint', function() {
@@ -64,6 +87,12 @@ gulp.task('sassbuild', function() {
 	}));
 });
 
-gulp.task('default', function() {
+gulp.task('default',['clean'], function() {
   // place code for your default task here
+  gulp.start('imgbuild');
+  gulp.start('sassbuild');
+
+  // watch
+  gulp.watch(pkg.img.watch, ['imgbuild']);
+  gulp.watch(pkg.sass.watch, ['sass']);
 });

@@ -16,11 +16,14 @@
   },
   "homepage": "https://github.com/bertpard/degroet#readme",
   "description": "",
+  "clean": [
+    "static/"
+  ],
   "sass": {
     "files": [
       {
         "src": "sass/*.scss",
-        "dest": "css/",
+        "dest": "static/css/",
         "file": "main.css"
       }
     ],
@@ -42,23 +45,30 @@
       ]
     }
   },
+  "img": {
+    "src": "img/**/*",
+    "dest": "static/img/",
+    "watch": "img/**/*"
+  },
   "devDependencies": {
+    "del": "^1.1.1",
     "event-stream": "^3.3.2",
     "gulp": "^3.9.1",
-    "gulp-watch": "^4.3.8",
-    "node-sass": "^3.8.0",
     "gulp-autoprefixer": "^3.1.0",
     "gulp-bless": "3.0.1",
     "gulp-cached": "^1.0.4",
     "gulp-concat": "^2.5.2",
     "gulp-copy": "^0.0.2",
     "gulp-eslint": "^1.1.0",
+    "gulp-jekyll": "0.0.0",
     "gulp-notify": "^2.2.0",
     "gulp-plumber": "^1.0.0",
     "gulp-sass": "^2.1.0",
     "gulp-scss-lint": "^0.3.8",
     "gulp-sourcemaps": "^1.5.1",
     "gulp-uglify": "^1.1.0",
-    "gulp-util": "^3.0.4"
+    "gulp-util": "^3.0.4",
+    "gulp-watch": "^4.3.8",
+    "node-sass": "^3.8.0"
   }
 }
